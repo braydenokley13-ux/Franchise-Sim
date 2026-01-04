@@ -2667,7 +2667,7 @@
     </div>
 
     <script>
-// COMPLETE STORAGE SYSTEM - ALL FEATURES
+// ULTIMATE STORAGE SYSTEM - Persistent Classes + Quiz Grading
 (function() {
     'use strict';
     
@@ -2694,7 +2694,13 @@
         },
         
         showLoginScreen: function() {
-            document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1628,#1e3a5f);"><div style="max-width:500px;width:100%;padding:3rem;background:rgba(255,255,255,0.05);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);"><div style="text-align:center;margin-bottom:2rem;"><div style="font-size:4rem;margin-bottom:1rem;">🏀</div><h1 style="font-size:2.5rem;color:#f5a623;margin-bottom:0.5rem;">THE FRONT OFFICE</h1><p style="color:#b8c5d6;font-size:1.1rem;">BOW Sports Capital Track 201</p></div><div id="role-selection" style="margin-bottom:2rem;"><p style="text-align:center;margin-bottom:1rem;color:#b8c5d6;">I am a...</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"><button onclick="AuthSystem.selectRole(\'student\')" style="padding:1.5rem;background:rgba(245,166,35,0.1);border:2px solid #f5a623;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">🎓 Student</button><button onclick="AuthSystem.selectRole(\'teacher\')" style="padding:1.5rem;background:rgba(59,130,246,0.1);border:2px solid #3b82f6;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">👨‍🏫 Teacher</button></div></div><div id="student-login" style="display:none;"><h3 style="color:#fff;margin-bottom:1rem;">Student Login</h3><input id="student-name" placeholder="Your Name" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;"><input id="class-code" placeholder="Class Code (e.g. TFR-ABC123)" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;text-transform:uppercase;"><button onclick="AuthSystem.studentSignIn()" style="width:100%;padding:1rem;background:#f5a623;color:#000;font-weight:bold;border-radius:6px;cursor:pointer;border:none;font-size:1.1rem;">Start Game 🚀</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">← Back</button></div><div id="teacher-login" style="display:none;"><h3 style="color:#fff;margin-bottom:1rem;">Teacher Access</h3><input id="teacher-name" placeholder="Your Name" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;"><button onclick="AuthSystem.teacherSignIn()" style="width:100%;padding:1rem;background:#3b82f6;color:#fff;font-weight:bold;border-radius:6px;cursor:pointer;border:none;font-size:1.1rem;">Access Dashboard 📊</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">← Back</button></div></div></div>';
+            document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1628,#1e3a5f);"><div style="max-width:600px;width:100%;padding:3rem;background:rgba(255,255,255,0.05);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);"><div style="text-align:center;margin-bottom:2rem;"><div style="font-size:4rem;margin-bottom:1rem;">🏀</div><h1 style="font-size:2.5rem;color:#f5a623;margin-bottom:0.5rem;">THE FRONT OFFICE</h1><p style="color:#b8c5d6;font-size:1.1rem;">BOW Sports Capital Track 201</p></div><div id="role-selection" style="margin-bottom:2rem;"><p style="text-align:center;margin-bottom:1rem;color:#b8c5d6;">I am a...</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"><button onclick="AuthSystem.selectRole(\'student\')" style="padding:1.5rem;background:rgba(245,166,35,0.1);border:2px solid #f5a623;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">🎓 Student</button><button onclick="AuthSystem.selectRole(\'teacher\')" style="padding:1.5rem;background:rgba(59,130,246,0.1);border:2px solid #3b82f6;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">👨‍🏫 Teacher</button></div></div><div id="student-login" style="display:none;"><h3 style="color:#fff;margin-bottom:1rem;">Student Login</h3><input id="student-name" placeholder="Your Name" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;"><input id="class-code" placeholder="Class Code (e.g. TFR-ABC123)" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;text-transform:uppercase;"><button onclick="AuthSystem.studentSignIn()" style="width:100%;padding:1rem;background:#f5a623;color:#000;font-weight:bold;border-radius:6px;cursor:pointer;border:none;font-size:1.1rem;">Start Game 🚀</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">← Back</button></div><div id="teacher-login" style="display:none;"><h3 style="color:#fff;margin-bottom:1rem;">Teacher Access</h3><input id="teacher-name" placeholder="Your Name" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;"><div style="margin-bottom:1rem;"><input type="checkbox" id="use-existing" onchange="AuthSystem.toggleExistingClass()" style="margin-right:0.5rem;"><label for="use-existing" style="color:#b8c5d6;">Use existing class code</label></div><div id="existing-code-input" style="display:none;margin-bottom:1rem;"><input id="existing-class-code" placeholder="Enter existing class code" style="width:100%;padding:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;text-transform:uppercase;"></div><button onclick="AuthSystem.teacherSignIn()" style="width:100%;padding:1rem;background:#3b82f6;color:#fff;font-weight:bold;border-radius:6px;cursor:pointer;border:none;font-size:1.1rem;">Access Dashboard 📊</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">← Back</button></div></div></div>';
+        },
+        
+        toggleExistingClass: function() {
+            var checkbox = document.getElementById('use-existing');
+            var input = document.getElementById('existing-code-input');
+            input.style.display = checkbox.checked ? 'block' : 'none';
         },
         
         selectRole: function(role) {
@@ -2721,16 +2727,28 @@
                 return;
             }
             
+            // Save class code to persistent list
+            this.addToClassList(code);
+            
             // Check if class exists
             var classKey = 'class_' + code;
             var classData = localStorage.getItem(classKey);
             
-            if (!classData) {
-                alert('Class code "' + code + '" not found! Make sure your teacher has created the class first.');
-                return;
-            }
+            console.log('Looking for class:', classKey);
+            console.log('Class data found:', classData);
             
-            console.log('Student signing in:', name, 'Class:', code);
+            if (!classData) {
+                // Class doesn't exist yet - create it for the student
+                console.log('Class not found, creating it...');
+                var newClassData = {
+                    teacher: 'Not set',
+                    classCode: code,
+                    created: Date.now(),
+                    students: []
+                };
+                localStorage.setItem(classKey, JSON.stringify(newClassData));
+                console.log('Class created for student');
+            }
             
             this.currentUser = {
                 name: name,
@@ -2742,14 +2760,10 @@
             this.isTeacher = false;
             this.classCode = code;
             
-            // Save user
             localStorage.setItem('tfr_user', JSON.stringify(this.currentUser));
-            console.log('User saved to localStorage');
+            console.log('User saved');
             
-            // Register student with class
             this.registerStudent();
-            
-            // Reload to start game
             location.reload();
         },
         
@@ -2760,9 +2774,27 @@
                 return;
             }
             
-            var code = 'TFR-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            var code;
+            var useExisting = document.getElementById('use-existing').checked;
             
-            console.log('Teacher creating class:', code);
+            if (useExisting) {
+                code = document.getElementById('existing-class-code').value.trim().toUpperCase();
+                if (!code) {
+                    alert('Please enter the existing class code!');
+                    return;
+                }
+                
+                // Check if class exists
+                var existingClass = localStorage.getItem('class_' + code);
+                if (!existingClass) {
+                    alert('Class code "' + code + '" not found! Create a new class instead.');
+                    return;
+                }
+            } else {
+                code = 'TFR-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            }
+            
+            console.log('Teacher accessing class:', code);
             
             this.currentUser = {
                 name: name,
@@ -2774,43 +2806,58 @@
             this.isTeacher = true;
             this.classCode = code;
             
-            // Save user
             localStorage.setItem('tfr_user', JSON.stringify(this.currentUser));
             
-            // Create class
-            var classData = {
-                teacher: name,
-                classCode: code,
-                created: Date.now(),
-                students: []
-            };
+            // Save class code to persistent list
+            this.addToClassList(code);
             
-            localStorage.setItem('class_' + code, JSON.stringify(classData));
-            console.log('Class created:', classData);
+            // Create or update class
+            var classKey = 'class_' + code;
+            var existingData = localStorage.getItem(classKey);
             
-            // Show dashboard
+            if (existingData) {
+                console.log('Accessing existing class');
+            } else {
+                var classData = {
+                    teacher: name,
+                    classCode: code,
+                    created: Date.now(),
+                    students: []
+                };
+                localStorage.setItem(classKey, JSON.stringify(classData));
+                console.log('New class created');
+            }
+            
             window.TeacherDashboard.show();
+        },
+        
+        addToClassList: function(code) {
+            var list = localStorage.getItem('tfr_all_classes');
+            var classes = list ? JSON.parse(list) : [];
+            if (!classes.includes(code)) {
+                classes.push(code);
+                localStorage.setItem('tfr_all_classes', JSON.stringify(classes));
+                console.log('Class code added to persistent list:', code);
+            }
         },
         
         registerStudent: function() {
             try {
                 var classKey = 'class_' + this.classCode;
                 var classDataStr = localStorage.getItem(classKey);
-                console.log('Registering student. Class data:', classDataStr);
                 
                 if (!classDataStr) {
-                    console.error('Class not found:', this.classCode);
+                    console.error('Class not found during registration');
                     return;
                 }
                 
                 var classData = JSON.parse(classDataStr);
                 
-                // Check if student already exists
                 var exists = false;
                 for (var i = 0; i < classData.students.length; i++) {
                     if (classData.students[i].name === this.currentUser.name) {
                         exists = true;
-                        console.log('Student already registered');
+                        console.log('Student already exists');
                         break;
                     }
                 }
@@ -2825,22 +2872,28 @@
                         ownerPressure: 0,
                         conceptsMastered: 0,
                         championships: 0,
-                        playoffAppearances: 0
+                        playoffAppearances: 0,
+                        quizScore: 0,
+                        quizTaken: false,
+                        quizAnswers: [],
+                        gameCompleted: false,
+                        finalRoster: 0,
+                        finalPressure: 0,
+                        tier: 'Not Set',
+                        finalTier: 'Not Set' 
                     };
                     
                     classData.students.push(newStudent);
                     localStorage.setItem(classKey, JSON.stringify(classData));
                     console.log('Student registered:', newStudent);
-                    console.log('Updated class data:', classData);
                 }
             } catch(e) {
-                console.error('Register student error:', e);
+                console.error('Register error:', e);
             }
         },
         
         updateProgress: function(gameState) {
             if (!this.currentUser || this.isTeacher) {
-                console.log('Not updating - no user or is teacher');
                 return;
             }
             
@@ -2849,15 +2902,12 @@
                 var classDataStr = localStorage.getItem(classKey);
                 
                 if (!classDataStr) {
-                    console.error('Class not found for update:', this.currentUser.classCode);
+                    console.error('Class not found for update');
                     return;
                 }
                 
                 var classData = JSON.parse(classDataStr);
-                console.log('Updating progress for:', this.currentUser.name);
                 
-                // Find and update student
-                var found = false;
                 for (var i = 0; i < classData.students.length; i++) {
                     if (classData.students[i].name === this.currentUser.name) {
                         classData.students[i].currentCycle = gameState.cycleIndex;
@@ -2867,29 +2917,61 @@
                         classData.students[i].championships = gameState.championships || 0;
                         classData.students[i].playoffAppearances = gameState.playoffAppearances || 0;
                         classData.students[i].lastActive = Date.now();
-                        found = true;
-                        console.log('Updated student data:', classData.students[i]);
+                        
+                        // Track tier
+                        if (gameState.currentTier) {
+                            classData.students[i].tier = gameState.currentTier;
+                        }
+                        
+                        // Track if game completed
+                        if (gameState.cycleIndex > 4) {
+                            classData.students[i].gameCompleted = true;
+                            classData.students[i].finalRoster = Math.round(gameState.rosterQuality);
+                            classData.students[i].finalPressure = Math.round(gameState.ownerPressure);
+                            if (gameState.currentTier) {
+                                classData.students[i].finalTier = gameState.currentTier;
+                            }
+                        }
+                        
+                        console.log('Progress updated:', classData.students[i]);
                         break;
                     }
                 }
                 
-                if (!found) {
-                    console.error('Student not found in class for update');
-                    return;
-                }
-                
-                // Save updated class data
                 localStorage.setItem(classKey, JSON.stringify(classData));
-                console.log('Progress saved to localStorage');
                 
             } catch(e) {
-                console.error('Update progress error:', e);
+                console.error('Update error:', e);
             }
         },
         
-        logout: function() {
-            localStorage.removeItem('tfr_user');
-            location.reload();
+        submitQuiz: function(score, totalQuestions, answers) {
+            if (!this.currentUser || this.isTeacher) {
+                return;
+            }
+            
+            try {
+                var classKey = 'class_' + this.currentUser.classCode;
+                var classData = JSON.parse(localStorage.getItem(classKey) || '{"students":[]}');
+                
+                for (var i = 0; i < classData.students.length; i++) {
+                    if (classData.students[i].name === this.currentUser.name) {
+                        classData.students[i].quizScore = score;
+                        classData.students[i].quizTotalQuestions = totalQuestions;
+                        classData.students[i].quizPercentage = Math.round((score / totalQuestions) * 100);
+                        classData.students[i].quizTaken = true;
+                        classData.students[i].quizAnswers = answers;
+                        classData.students[i].quizSubmittedAt = Date.now();
+                        console.log('Quiz submitted:', score + '/' + totalQuestions);
+                        break;
+                    }
+                }
+                
+                localStorage.setItem(classKey, JSON.stringify(classData));
+                
+            } catch(e) {
+                console.error('Quiz submit error:', e);
+            }
         }
     };
     
@@ -2898,149 +2980,195 @@
         
         show: function() {
             var user = window.AuthSystem.currentUser;
-            if (!user) {
-                console.error('No user found');
-                return;
-            }
-            
             var classKey = 'class_' + user.classCode;
-            var classDataStr = localStorage.getItem(classKey);
+            var classData = JSON.parse(localStorage.getItem(classKey) || '{"students":[]}');
             
-            if (!classDataStr) {
-                console.error('Class data not found:', classKey);
-                return;
-            }
+            console.log('Dashboard loading for:', classData);
             
-            var classData = JSON.parse(classDataStr);
-            console.log('Showing dashboard for class:', classData);
-            
-            // Build HTML
-            var html = '<div style="min-height:100vh;background:#0a1628;padding:2rem;"><div style="max-width:1400px;margin:auto;">';
+            var html = '<div style="min-height:100vh;background:#0a1628;padding:2rem;"><div style="max-width:1600px;margin:auto;">';
             
             // Header
             html += '<div style="padding:1.5rem;background:rgba(255,255,255,0.05);border-radius:12px;margin-bottom:2rem;">';
             html += '<h1 style="color:#f5a623;margin-bottom:0.5rem;">📊 Teacher Dashboard</h1>';
-            html += '<p style="color:#b8c5d6;font-size:1.1rem;">Teacher: <strong>' + user.name + '</strong></p>';
-            html += '<p style="color:#b8c5d6;margin:0.5rem 0;">Class Code: <strong style="color:#f5a623;font-size:1.8rem;letter-spacing:3px;background:rgba(245,166,35,0.1);padding:0.5rem 1rem;border-radius:6px;display:inline-block;margin-left:1rem;">' + user.classCode + '</strong></p>';
-            html += '<p style="color:#7a8a9e;font-size:0.9rem;margin-top:0.5rem;">Share this code with your students</p>';
+            html += '<p style="color:#b8c5d6;">Teacher: <strong>' + user.name + '</strong></p>';
+            html += '<div style="margin:1rem 0;padding:1rem;background:rgba(245,166,35,0.15);border:2px dashed #f5a623;border-radius:8px;display:inline-block;">';
+            html += '<p style="color:#b8c5d6;margin-bottom:0.5rem;">📋 CLASS CODE (Share with students):</p>';
+            html += '<p style="color:#f5a623;font-size:2.5rem;font-weight:bold;letter-spacing:5px;font-family:monospace;">' + user.classCode + '</p>';
+            html += '</div>';
             html += '<div style="margin-top:1rem;">';
-            html += '<button onclick="TeacherDashboard.refresh()" style="padding:0.75rem 1.5rem;background:#f5a623;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-right:0.5rem;">🔄 Refresh Now</button>';
+            html += '<button onclick="TeacherDashboard.refresh()" style="padding:0.75rem 1.5rem;background:#f5a623;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-right:0.5rem;">🔄 Refresh</button>';
             html += '<button onclick="TeacherDashboard.exportCSV()" style="padding:0.75rem 1.5rem;background:#22c55e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-right:0.5rem;">📥 Export CSV</button>';
+            html += '<button onclick="TeacherDashboard.showAllClasses()" style="padding:0.75rem 1.5rem;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-right:0.5rem;">📚 All Classes</button>';
             html += '<button onclick="AuthSystem.logout()" style="padding:0.75rem 1.5rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Logout</button>';
             html += '</div></div>';
             
-            // Stats cards
-            html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">';
-            
-            var totalStudents = classData.students.length;
+            // Calculate stats
+            var total = classData.students.length;
             var completed = 0;
+            var quizTaken = 0;
+            var avgQuiz = 0;
             var avgCycle = 0;
             var avgRoster = 0;
-            var avgPressure = 0;
             var totalChamps = 0;
             
-            for (var i = 0; i < classData.students.length; i++) {
+            for (var i = 0; i < total; i++) {
                 var s = classData.students[i];
-                if (s.currentCycle >= 4) completed++;
-                avgCycle += (s.currentCycle || 0);
-                avgRoster += (s.rosterQuality || 0);
-                avgPressure += (s.ownerPressure || 0);
-                totalChamps += (s.championships || 0);
+                if (s.gameCompleted) completed++;
+                if (s.quizTaken) {
+                    quizTaken++;
+                    avgQuiz += s.quizPercentage || 0;
+                }
+                avgCycle += s.currentCycle || 0;
+                avgRoster += s.rosterQuality || 0;
+                totalChamps += s.championships || 0;
             }
             
-            if (totalStudents > 0) {
-                avgCycle = avgCycle / totalStudents;
-                avgRoster = avgRoster / totalStudents;
-                avgPressure = avgPressure / totalStudents;
+            if (total > 0) {
+                avgCycle = avgCycle / total;
+                avgRoster = avgRoster / total;
+            }
+            if (quizTaken > 0) {
+                avgQuiz = avgQuiz / quizTaken;
             }
             
-            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #f5a623;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Total Students</div><div style="font-size:2.5rem;font-weight:bold;color:#f5a623;">' + totalStudents + '</div></div>';
-            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #22c55e;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Completed</div><div style="font-size:2.5rem;font-weight:bold;color:#22c55e;">' + completed + '</div></div>';
+            // Stats cards
+            html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #f5a623;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Total Students</div><div style="font-size:2.5rem;font-weight:bold;color:#f5a623;">' + total + '</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #22c55e;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Completed Game</div><div style="font-size:2.5rem;font-weight:bold;color:#22c55e;">' + completed + '</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #8b5cf6;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Quiz Taken</div><div style="font-size:2.5rem;font-weight:bold;color:#8b5cf6;">' + quizTaken + '</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #06b6d4;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Quiz Score</div><div style="font-size:2.5rem;font-weight:bold;color:#06b6d4;">' + Math.round(avgQuiz) + '%</div></div>';
             html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #3b82f6;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Cycle</div><div style="font-size:2.5rem;font-weight:bold;color:#3b82f6;">' + avgCycle.toFixed(1) + '</div></div>';
-            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #f59e0b;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Roster</div><div style="font-size:2.5rem;font-weight:bold;color:#f59e0b;">' + Math.round(avgRoster) + '%</div></div>';
-            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #ef4444;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Pressure</div><div style="font-size:2.5rem;font-weight:bold;color:#ef4444;">' + Math.round(avgPressure) + '%</div></div>';
             html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #fbbf24;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Championships</div><div style="font-size:2.5rem;font-weight:bold;color:#fbbf24;">🏆 ' + totalChamps + '</div></div>';
             html += '</div>';
             
             // Student table
             html += '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:1.5rem;">';
-            html += '<h2 style="color:#f5a623;margin-bottom:1rem;">Students (' + totalStudents + ')</h2>';
+            html += '<h2 style="color:#f5a623;margin-bottom:1rem;">Students (' + total + ')</h2>';
             html += '<div style="overflow-x:auto;">';
             html += '<table style="width:100%;color:#fff;border-collapse:collapse;">';
-            html += '<thead><tr style="background:rgba(255,255,255,0.1);text-align:left;">';
-            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Name</th>';
+            html += '<thead><tr style="background:rgba(255,255,255,0.1);">';
+            html += '<th style="padding:1rem;text-align:left;border-bottom:2px solid #2d4a6f;">Name</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Cycle</th>';
-            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Roster Quality</th>';
-            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Owner Pressure</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Quiz</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Roster</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Pressure</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Concepts</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Tier</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Champs</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Status</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Last Active</th>';
             html += '</tr></thead><tbody>';
             
-            if (totalStudents === 0) {
-                html += '<tr><td colspan="7" style="padding:2rem;text-align:center;color:#b8c5d6;"><div style="font-size:3rem;margin-bottom:1rem;">👥</div><p>No students yet!</p><p style="color:#7a8a9e;margin-top:0.5rem;">Students will appear here when they sign in with your class code.</p></td></tr>';
+            if (total === 0) {
+                html += '<tr><td colspan="10" style="padding:3rem;text-align:center;"><div style="font-size:3rem;margin-bottom:1rem;">👥</div><p style="color:#b8c5d6;">No students yet</p><p style="color:#7a8a9e;margin-top:0.5rem;">Students will appear when they join with code: <strong style="color:#f5a623;">' + user.classCode + '</strong></p></td></tr>';
             } else {
+                classData.students.sort(function(a, b) {
+                    return (b.lastActive || 0) - (a.lastActive || 0);
+                });
+                
                 for (var i = 0; i < classData.students.length; i++) {
-                    var s = classData.students[i];
-                    var lastActive = new Date(s.lastActive || s.startTime);
-                    var now = new Date();
-                    var diffSec = Math.floor((now - lastActive) / 1000);
-                    var timeAgo = diffSec < 60 ? 'Just now' :
-                                  diffSec < 3600 ? Math.floor(diffSec / 60) + 'm ago' :
-                                  diffSec < 86400 ? Math.floor(diffSec / 3600) + 'h ago' :
-                                  Math.floor(diffSec / 86400) + 'd ago';
-                    
-                    var rosterColor = s.rosterQuality >= 70 ? '#22c55e' : s.rosterQuality >= 50 ? '#f59e0b' : '#ef4444';
-                    var pressureColor = s.ownerPressure >= 70 ? '#ef4444' : s.ownerPressure >= 50 ? '#f59e0b' : '#22c55e';
-                    
-                    html += '<tr style="border-bottom:1px solid #2d4a6f;">';
-                    html += '<td style="padding:1rem;font-weight:600;">' + s.name + '</td>';
-                    html += '<td style="padding:1rem;text-align:center;"><span style="font-weight:600;">' + (s.currentCycle || 0) + '</span> / 4</td>';
-                    html += '<td style="padding:1rem;text-align:center;"><span style="color:' + rosterColor + ';font-weight:600;">' + Math.round(s.rosterQuality || 0) + '%</span></td>';
-                    html += '<td style="padding:1rem;text-align:center;"><span style="color:' + pressureColor + ';font-weight:600;">' + Math.round(s.ownerPressure || 0) + '%</span></td>';
-                    html += '<td style="padding:1rem;text-align:center;">' + (s.conceptsMastered || 0) + '</td>';
-                    html += '<td style="padding:1rem;text-align:center;font-size:1.2rem;">' + (s.championships > 0 ? '🏆 ' + s.championships : '-') + '</td>';
-                    html += '<td style="padding:1rem;text-align:center;color:#7a8a9e;font-size:0.9rem;">' + timeAgo + '</td>';
-                    html += '</tr>';
+                    html += this.renderStudentRow(classData.students[i]);
                 }
             }
             
             html += '</tbody></table></div></div>';
-            html += '<div style="text-align:center;margin-top:2rem;padding:1rem;background:rgba(245,166,35,0.1);border-radius:8px;">';
-            html += '<p style="color:#b8c5d6;font-size:0.9rem;">💡 Dashboard auto-refreshes every 10 seconds. Click "Refresh Now" for immediate update.</p>';
+            html += '<div style="margin-top:2rem;padding:1rem;background:rgba(245,166,35,0.1);border-radius:8px;text-align:center;">';
+            html += '<p style="color:#b8c5d6;">💡 Auto-refreshes every 10 seconds | Class code persists forever | Export CSV for grading</p>';
             html += '</div></div></div>';
             
             document.body.innerHTML = html;
             
-            // Auto-refresh every 10 seconds
             if (this.refreshTimer) clearInterval(this.refreshTimer);
             this.refreshTimer = setInterval(function() {
                 window.TeacherDashboard.refresh();
             }, 10000);
+        },
+        
+        renderStudentRow: function(s) {
+            var timeAgo = this.getTimeAgo(new Date(s.lastActive || s.startTime));
+            var rosterColor = s.rosterQuality >= 70 ? '#22c55e' : s.rosterQuality >= 50 ? '#f59e0b' : '#ef4444';
+            var pressureColor = s.ownerPressure >= 70 ? '#ef4444' : s.ownerPressure >= 50 ? '#f59e0b' : '#22c55e';
             
-            console.log('Dashboard rendered');
+            var quizDisplay = s.quizTaken ? 
+                '<span style="color:' + (s.quizPercentage >= 70 ? '#22c55e' : s.quizPercentage >= 60 ? '#f59e0b' : '#ef4444') + ';font-weight:600;">' + s.quizPercentage + '%</span>' :
+                '<span style="color:#7a8a9e;">Not taken</span>';
+            
+            var status = s.gameCompleted ? '<span style="color:#22c55e;">✅ Done</span>' : 
+                        s.currentCycle > 0 ? '<span style="color:#f59e0b;">⏳ In Progress</span>' :
+                        '<span style="color:#7a8a9e;">🆕 Just Started</span>';
+            
+            var html = '<tr style="border-bottom:1px solid #2d4a6f;">';
+            html += '<td style="padding:1rem;font-weight:600;">' + s.name + '</td>';
+            html += '<td style="padding:1rem;text-align:center;"><strong>' + (s.currentCycle || 0) + '</strong>/4</td>';
+            html += '<td style="padding:1rem;text-align:center;">' + quizDisplay + '</td>';
+            html += '<td style="padding:1rem;text-align:center;"><span style="color:' + rosterColor + ';font-weight:600;">' + Math.round(s.rosterQuality || 0) + '%</span></td>';
+            html += '<td style="padding:1rem;text-align:center;"><span style="color:' + pressureColor + ';font-weight:600;">' + Math.round(s.ownerPressure || 0) + '%</span></td>';
+            html += '<td style="padding:1rem;text-align:center;">' + (s.conceptsMastered || 0) + '</td>';
+            var tierDisplay = s.tier || 'Not Set';
+            var tierColor = tierDisplay === 'Elite' ? '#fbbf24' : 
+                           tierDisplay === 'Contender' ? '#22c55e' :
+                           tierDisplay === 'Middling' ? '#3b82f6' :
+                           tierDisplay === 'Rebuilding' ? '#f59e0b' : '#7a8a9e';
+            html += '<td style="padding:1rem;text-align:center;"><span style="color:' + tierColor + ';font-weight:600;">' + tierDisplay + '</span></td>';
+            html += '<td style="padding:1rem;text-align:center;">' + (s.championships > 0 ? '🏆 ' + s.championships : '-') + '</td>';
+            html += '<td style="padding:1rem;text-align:center;">' + status + '</td>';
+            html += '<td style="padding:1rem;text-align:center;color:#7a8a9e;font-size:0.9rem;">' + timeAgo + '</td>';
+            html += '</tr>';
+            return html;
+        },
+        
+        getTimeAgo: function(date) {
+            var sec = Math.floor((new Date() - date) / 1000);
+            if (sec < 60) return 'Just now';
+            if (sec < 3600) return Math.floor(sec / 60) + 'm ago';
+            if (sec < 86400) return Math.floor(sec / 3600) + 'h ago';
+            return Math.floor(sec / 86400) + 'd ago';
         },
         
         refresh: function() {
-            console.log('Refreshing dashboard...');
             this.show();
+        },
+        
+        showAllClasses: function() {
+            var allClasses = JSON.parse(localStorage.getItem('tfr_all_classes') || '[]');
+            var html = '<div style="padding:2rem;max-width:800px;margin:auto;"><h2 style="color:#f5a623;">All Classes</h2>';
+            html += '<div style="margin:1rem 0;">';
+            
+            if (allClasses.length === 0) {
+                html += '<p style="color:#b8c5d6;">No classes created yet</p>';
+            } else {
+                for (var i = 0; i < allClasses.length; i++) {
+                    var code = allClasses[i];
+                    var classData = JSON.parse(localStorage.getItem('class_' + code) || '{}');
+                    html += '<div style="padding:1rem;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:1rem;">';
+                    html += '<strong style="color:#f5a623;">' + code + '</strong> - ';
+                    html += (classData.students ? classData.students.length : 0) + ' students';
+                    html += '</div>';
+                }
+            }
+            
+            html += '</div><button onclick="TeacherDashboard.show()" style="padding:1rem;background:#f5a623;color:#000;border:none;border-radius:6px;cursor:pointer;">Back to Dashboard</button></div>';
+            document.body.innerHTML = html;
         },
         
         exportCSV: function() {
             var user = window.AuthSystem.currentUser;
             var classData = JSON.parse(localStorage.getItem('class_' + user.classCode) || '{"students":[]}');
             
-            var csv = 'Name,Cycle,Roster Quality,Owner Pressure,Concepts Mastered,Championships,Playoff Appearances,Last Active\n';
+            var csv = 'Name,Cycle,Quiz Score,Quiz %,Roster Quality,Owner Pressure,Concepts,Tier,Championships,Completed,Last Active\n';
             
             for (var i = 0; i < classData.students.length; i++) {
                 var s = classData.students[i];
                 csv += '"' + s.name + '",';
                 csv += (s.currentCycle || 0) + ',';
+                csv += (s.quizTaken ? s.quizScore + '/' + s.quizTotalQuestions : 'Not taken') + ',';
+                csv += (s.quizPercentage || 0) + ',';
                 csv += Math.round(s.rosterQuality || 0) + ',';
                 csv += Math.round(s.ownerPressure || 0) + ',';
                 csv += (s.conceptsMastered || 0) + ',';
+                csv += (s.tier || 'Not Set') + ',';
                 csv += (s.championships || 0) + ',';
-                csv += (s.playoffAppearances || 0) + ',';
+                csv += (s.gameCompleted ? 'Yes' : 'No') + ',';
                 csv += '"' + new Date(s.lastActive || s.startTime).toLocaleString() + '"\n';
             }
             
@@ -3048,19 +3176,76 @@
             var url = URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
-            a.download = 'TFR_Class_' + user.classCode + '_' + new Date().toISOString().split('T')[0] + '.csv';
+            a.download = 'TFR_' + user.classCode + '_Grades_' + new Date().toISOString().split('T')[0] + '.csv';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            console.log('CSV exported');
         }
     };
     
 })();
 
-console.log('✅ Complete storage system loaded');
+console.log('✅ Ultimate storage system loaded - Classes persist forever!');
+
+
+
+// Add this to integrate with the existing quiz system
+
+// Override or hook into the existing quiz submission
+window.originalSubmitQuiz = window.submitQuiz;
+window.submitQuiz = function() {
+    console.log('Quiz being submitted...');
+    
+    // Call original function if it exists
+    if (window.originalSubmitQuiz) {
+        window.originalSubmitQuiz();
+    }
+    
+    // Get quiz results from GameState
+    if (window.GameState && window.GameState.quizResults) {
+        var results = window.GameState.quizResults;
+        var score = results.correctAnswers || 0;
+        var total = results.totalQuestions || 10;
+        var answers = results.answers || [];
+        
+        console.log('Quiz results:', score + '/' + total);
+        
+        // Submit to storage system
+        if (window.AuthSystem) {
+            window.AuthSystem.submitQuiz(score, total, answers);
+        }
+    }
+};
+
+// Hook into quiz completion
+if (window.GameState) {
+    var originalCompleteQuiz = window.GameState.completeQuiz;
+    if (originalCompleteQuiz) {
+        window.GameState.completeQuiz = function(score, total, answers) {
+            console.log('Quiz completed:', score, total);
+            
+            // Store results
+            window.GameState.quizResults = {
+                correctAnswers: score,
+                totalQuestions: total,
+                answers: answers
+            };
+            
+            // Submit to storage
+            if (window.AuthSystem) {
+                window.AuthSystem.submitQuiz(score, total, answers);
+            }
+            
+            // Call original
+            if (originalCompleteQuiz) {
+                originalCompleteQuiz.call(this, score, total, answers);
+            }
+        };
+    }
+}
+
+console.log('✅ Quiz integration loaded');
 
 
 
@@ -15528,10 +15713,11 @@ function downloadQuizAnswers() {
             
             GameState.advanceCycle();
             
-            console.log('Cycle advanced to:', GameState.cycleIndex);
-            if (window.AuthSystem && window.AuthSystem.currentUser && !window.AuthSystem.isTeacher) {
+            console.log('=== CYCLE ADVANCED ===');
+            if (window.AuthSystem && !window.AuthSystem.isTeacher) {
                 console.log('Updating student progress...');
                 window.AuthSystem.updateProgress(GameState);
+                console.log('Progress saved!');
             }
             
             console.log('New Cycle:', GameState.cycleIndex);
@@ -16169,19 +16355,19 @@ function downloadQuizAnswers() {
         
         // EVENT LISTENERS
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM loaded, checking auth...');
+            console.log('=== GAME STARTING ===');
             if (!window.AuthSystem.init()) {
-                console.log('No user found, showing login');
+                console.log('No user - showing login');
                 window.AuthSystem.showLoginScreen();
                 return;
             }
-            console.log('User found:', window.AuthSystem.currentUser);
+            console.log('User logged in:', window.AuthSystem.currentUser.name, window.AuthSystem.currentUser.role);
             if (window.AuthSystem.isTeacher) {
-                console.log('User is teacher, showing dashboard');
+                console.log('Opening teacher dashboard');
                 window.TeacherDashboard.show();
                 return;
             }
-            console.log('User is student, starting game');
+            console.log('Starting student game');
             document.getElementById('btn-start').addEventListener('click', () => showScreen('franchise'));
             document.getElementById('btn-how-it-works').addEventListener('click', () => showModal('how'));
             
