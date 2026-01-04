@@ -2667,7 +2667,7 @@
     </div>
 
     <script>
-// Authentication System
+// COMPLETE STORAGE SYSTEM - ALL FEATURES
 (function() {
     'use strict';
     
@@ -2679,10 +2679,12 @@
         init: function() {
             try {
                 var saved = localStorage.getItem('tfr_user');
+                console.log('Checking for saved user:', saved);
                 if (saved) {
                     this.currentUser = JSON.parse(saved);
                     this.isTeacher = this.currentUser.role === 'teacher';
                     this.classCode = this.currentUser.classCode;
+                    console.log('User loaded:', this.currentUser);
                     return true;
                 }
             } catch(e) {
@@ -2692,7 +2694,7 @@
         },
         
         showLoginScreen: function() {
-            document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1628,#1e3a5f);"><div style="max-width:500px;width:100%;padding:3rem;background:rgba(255,255,255,0.05);border-radius:16px;"><div style="text-align:center;margin-bottom:2rem;"><div style="font-size:4rem;margin-bottom:1rem;">🏀</div><h1 style="font-size:2.5rem;color:#f5a623;">THE FRONT OFFICE</h1><p style="color:#b8c5d6;">BOW Sports Capital Track 201</p></div><div id="role-selection"><p style="text-align:center;margin-bottom:1rem;color:#b8c5d6;">I am a...</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"><button onclick="AuthSystem.selectRole(\'student\')" style="padding:1.5rem;background:rgba(245,166,35,0.1);border:2px solid #f5a623;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">Student</button><button onclick="AuthSystem.selectRole(\'teacher\')" style="padding:1.5rem;background:rgba(59,130,246,0.1);border:2px solid #3b82f6;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">Teacher</button></div></div><div id="student-login" style="display:none;"><h3>Student Login</h3><input id="student-name" placeholder="Your Name" style="width:100%;padding:1rem;margin:1rem 0;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;"><input id="class-code" placeholder="Class Code" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;text-transform:uppercase;"><button onclick="AuthSystem.studentSignIn()" style="width:100%;padding:1rem;background:#f5a623;color:#000;font-weight:bold;border-radius:6px;cursor:pointer;border:none;">Start Game</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">Back</button></div><div id="teacher-login" style="display:none;"><h3>Teacher Access</h3><input id="teacher-name" placeholder="Your Name" style="width:100%;padding:1rem;margin:1rem 0;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;"><button onclick="AuthSystem.teacherSignIn()" style="width:100%;padding:1rem;background:#3b82f6;color:#fff;font-weight:bold;border-radius:6px;cursor:pointer;border:none;">Access Dashboard</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">Back</button></div></div></div>';
+            document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1628,#1e3a5f);"><div style="max-width:500px;width:100%;padding:3rem;background:rgba(255,255,255,0.05);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);"><div style="text-align:center;margin-bottom:2rem;"><div style="font-size:4rem;margin-bottom:1rem;">🏀</div><h1 style="font-size:2.5rem;color:#f5a623;margin-bottom:0.5rem;">THE FRONT OFFICE</h1><p style="color:#b8c5d6;font-size:1.1rem;">BOW Sports Capital Track 201</p></div><div id="role-selection" style="margin-bottom:2rem;"><p style="text-align:center;margin-bottom:1rem;color:#b8c5d6;">I am a...</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"><button onclick="AuthSystem.selectRole(\'student\')" style="padding:1.5rem;background:rgba(245,166,35,0.1);border:2px solid #f5a623;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">🎓 Student</button><button onclick="AuthSystem.selectRole(\'teacher\')" style="padding:1.5rem;background:rgba(59,130,246,0.1);border:2px solid #3b82f6;border-radius:8px;cursor:pointer;font-size:1.1rem;font-weight:600;color:#fff;">👨‍🏫 Teacher</button></div></div><div id="student-login" style="display:none;"><h3 style="color:#fff;margin-bottom:1rem;">Student Login</h3><input id="student-name" placeholder="Your Name" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;"><input id="class-code" placeholder="Class Code (e.g. TFR-ABC123)" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;text-transform:uppercase;"><button onclick="AuthSystem.studentSignIn()" style="width:100%;padding:1rem;background:#f5a623;color:#000;font-weight:bold;border-radius:6px;cursor:pointer;border:none;font-size:1.1rem;">Start Game 🚀</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">← Back</button></div><div id="teacher-login" style="display:none;"><h3 style="color:#fff;margin-bottom:1rem;">Teacher Access</h3><input id="teacher-name" placeholder="Your Name" style="width:100%;padding:1rem;margin-bottom:1rem;border-radius:6px;border:2px solid #2d4a6f;background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;"><button onclick="AuthSystem.teacherSignIn()" style="width:100%;padding:1rem;background:#3b82f6;color:#fff;font-weight:bold;border-radius:6px;cursor:pointer;border:none;font-size:1.1rem;">Access Dashboard 📊</button><button onclick="AuthSystem.showRoleSelection()" style="width:100%;padding:0.75rem;margin-top:0.5rem;background:transparent;color:#b8c5d6;border:none;cursor:pointer;">← Back</button></div></div></div>';
         },
         
         selectRole: function(role) {
@@ -2713,50 +2715,108 @@
         studentSignIn: function() {
             var name = document.getElementById('student-name').value.trim();
             var code = document.getElementById('class-code').value.trim().toUpperCase();
+            
             if (!name || !code) {
-                alert('Please enter your name and class code');
+                alert('Please enter both your name and class code!');
                 return;
             }
-            this.currentUser = {name: name, role: 'student', classCode: code, timestamp: Date.now()};
+            
+            // Check if class exists
+            var classKey = 'class_' + code;
+            var classData = localStorage.getItem(classKey);
+            
+            if (!classData) {
+                alert('Class code "' + code + '" not found! Make sure your teacher has created the class first.');
+                return;
+            }
+            
+            console.log('Student signing in:', name, 'Class:', code);
+            
+            this.currentUser = {
+                name: name,
+                role: 'student',
+                classCode: code,
+                timestamp: Date.now()
+            };
+            
             this.isTeacher = false;
             this.classCode = code;
+            
+            // Save user
             localStorage.setItem('tfr_user', JSON.stringify(this.currentUser));
+            console.log('User saved to localStorage');
+            
+            // Register student with class
             this.registerStudent();
+            
+            // Reload to start game
             location.reload();
         },
         
         teacherSignIn: function() {
             var name = document.getElementById('teacher-name').value.trim();
             if (!name) {
-                alert('Please enter your name');
+                alert('Please enter your name!');
                 return;
             }
+            
             var code = 'TFR-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            this.currentUser = {name: name, role: 'teacher', classCode: code, timestamp: Date.now()};
+            
+            console.log('Teacher creating class:', code);
+            
+            this.currentUser = {
+                name: name,
+                role: 'teacher',
+                classCode: code,
+                timestamp: Date.now()
+            };
+            
             this.isTeacher = true;
             this.classCode = code;
+            
+            // Save user
             localStorage.setItem('tfr_user', JSON.stringify(this.currentUser));
-            localStorage.setItem('class_' + code, JSON.stringify({
+            
+            // Create class
+            var classData = {
                 teacher: name,
                 classCode: code,
                 created: Date.now(),
                 students: []
-            }));
+            };
+            
+            localStorage.setItem('class_' + code, JSON.stringify(classData));
+            console.log('Class created:', classData);
+            
+            // Show dashboard
             window.TeacherDashboard.show();
         },
         
         registerStudent: function() {
             try {
-                var data = JSON.parse(localStorage.getItem('class_' + this.classCode) || '{"students":[]}');
+                var classKey = 'class_' + this.classCode;
+                var classDataStr = localStorage.getItem(classKey);
+                console.log('Registering student. Class data:', classDataStr);
+                
+                if (!classDataStr) {
+                    console.error('Class not found:', this.classCode);
+                    return;
+                }
+                
+                var classData = JSON.parse(classDataStr);
+                
+                // Check if student already exists
                 var exists = false;
-                for (var i = 0; i < data.students.length; i++) {
-                    if (data.students[i].name === this.currentUser.name) {
+                for (var i = 0; i < classData.students.length; i++) {
+                    if (classData.students[i].name === this.currentUser.name) {
                         exists = true;
+                        console.log('Student already registered');
                         break;
                     }
                 }
+                
                 if (!exists) {
-                    data.students.push({
+                    var newStudent = {
                         name: this.currentUser.name,
                         startTime: Date.now(),
                         currentCycle: 0,
@@ -2764,83 +2824,244 @@
                         rosterQuality: 0,
                         ownerPressure: 0,
                         conceptsMastered: 0,
-                        championships: 0
-                    });
-                    localStorage.setItem('class_' + this.classCode, JSON.stringify(data));
+                        championships: 0,
+                        playoffAppearances: 0
+                    };
+                    
+                    classData.students.push(newStudent);
+                    localStorage.setItem(classKey, JSON.stringify(classData));
+                    console.log('Student registered:', newStudent);
+                    console.log('Updated class data:', classData);
                 }
             } catch(e) {
-                console.error('Register error:', e);
+                console.error('Register student error:', e);
             }
         },
         
-        updateProgress: function(state) {
-            if (!this.currentUser || this.isTeacher) return;
+        updateProgress: function(gameState) {
+            if (!this.currentUser || this.isTeacher) {
+                console.log('Not updating - no user or is teacher');
+                return;
+            }
+            
             try {
-                var data = JSON.parse(localStorage.getItem('class_' + this.currentUser.classCode) || '{"students":[]}');
-                for (var i = 0; i < data.students.length; i++) {
-                    if (data.students[i].name === this.currentUser.name) {
-                        data.students[i].currentCycle = state.cycleIndex;
-                        data.students[i].rosterQuality = state.rosterQuality;
-                        data.students[i].ownerPressure = state.ownerPressure;
-                        data.students[i].conceptsMastered = Object.keys(state.conceptMastery).length;
-                        data.students[i].championships = state.championships || 0;
-                        data.students[i].lastActive = Date.now();
+                var classKey = 'class_' + this.currentUser.classCode;
+                var classDataStr = localStorage.getItem(classKey);
+                
+                if (!classDataStr) {
+                    console.error('Class not found for update:', this.currentUser.classCode);
+                    return;
+                }
+                
+                var classData = JSON.parse(classDataStr);
+                console.log('Updating progress for:', this.currentUser.name);
+                
+                // Find and update student
+                var found = false;
+                for (var i = 0; i < classData.students.length; i++) {
+                    if (classData.students[i].name === this.currentUser.name) {
+                        classData.students[i].currentCycle = gameState.cycleIndex;
+                        classData.students[i].rosterQuality = Math.round(gameState.rosterQuality);
+                        classData.students[i].ownerPressure = Math.round(gameState.ownerPressure);
+                        classData.students[i].conceptsMastered = Object.keys(gameState.conceptMastery || {}).length;
+                        classData.students[i].championships = gameState.championships || 0;
+                        classData.students[i].playoffAppearances = gameState.playoffAppearances || 0;
+                        classData.students[i].lastActive = Date.now();
+                        found = true;
+                        console.log('Updated student data:', classData.students[i]);
                         break;
                     }
                 }
-                localStorage.setItem('class_' + this.currentUser.classCode, JSON.stringify(data));
+                
+                if (!found) {
+                    console.error('Student not found in class for update');
+                    return;
+                }
+                
+                // Save updated class data
+                localStorage.setItem(classKey, JSON.stringify(classData));
+                console.log('Progress saved to localStorage');
+                
             } catch(e) {
                 console.error('Update progress error:', e);
             }
+        },
+        
+        logout: function() {
+            localStorage.removeItem('tfr_user');
+            location.reload();
         }
     };
     
     window.TeacherDashboard = {
+        refreshTimer: null,
+        
         show: function() {
             var user = window.AuthSystem.currentUser;
-            var data = JSON.parse(localStorage.getItem('class_' + user.classCode) || '{"students":[]}');
+            if (!user) {
+                console.error('No user found');
+                return;
+            }
             
+            var classKey = 'class_' + user.classCode;
+            var classDataStr = localStorage.getItem(classKey);
+            
+            if (!classDataStr) {
+                console.error('Class data not found:', classKey);
+                return;
+            }
+            
+            var classData = JSON.parse(classDataStr);
+            console.log('Showing dashboard for class:', classData);
+            
+            // Build HTML
             var html = '<div style="min-height:100vh;background:#0a1628;padding:2rem;"><div style="max-width:1400px;margin:auto;">';
+            
+            // Header
             html += '<div style="padding:1.5rem;background:rgba(255,255,255,0.05);border-radius:12px;margin-bottom:2rem;">';
-            html += '<h1 style="color:#f5a623;">Teacher Dashboard</h1>';
-            html += '<p style="color:#b8c5d6;">Class Code: <strong style="color:#f5a623;font-size:1.5rem;">' + user.classCode + '</strong></p>';
-            html += '<button onclick="TeacherDashboard.refresh()" style="padding:0.75rem 1.5rem;background:#f5a623;color:#000;border:none;border-radius:6px;cursor:pointer;margin-top:1rem;">Refresh</button>';
-            html += '<button onclick="localStorage.removeItem(\'tfr_user\');location.reload()" style="padding:0.75rem 1.5rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-left:1rem;">Logout</button>';
+            html += '<h1 style="color:#f5a623;margin-bottom:0.5rem;">📊 Teacher Dashboard</h1>';
+            html += '<p style="color:#b8c5d6;font-size:1.1rem;">Teacher: <strong>' + user.name + '</strong></p>';
+            html += '<p style="color:#b8c5d6;margin:0.5rem 0;">Class Code: <strong style="color:#f5a623;font-size:1.8rem;letter-spacing:3px;background:rgba(245,166,35,0.1);padding:0.5rem 1rem;border-radius:6px;display:inline-block;margin-left:1rem;">' + user.classCode + '</strong></p>';
+            html += '<p style="color:#7a8a9e;font-size:0.9rem;margin-top:0.5rem;">Share this code with your students</p>';
+            html += '<div style="margin-top:1rem;">';
+            html += '<button onclick="TeacherDashboard.refresh()" style="padding:0.75rem 1.5rem;background:#f5a623;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-right:0.5rem;">🔄 Refresh Now</button>';
+            html += '<button onclick="TeacherDashboard.exportCSV()" style="padding:0.75rem 1.5rem;background:#22c55e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-right:0.5rem;">📥 Export CSV</button>';
+            html += '<button onclick="AuthSystem.logout()" style="padding:0.75rem 1.5rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Logout</button>';
+            html += '</div></div>';
+            
+            // Stats cards
+            html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">';
+            
+            var totalStudents = classData.students.length;
+            var completed = 0;
+            var avgCycle = 0;
+            var avgRoster = 0;
+            var avgPressure = 0;
+            var totalChamps = 0;
+            
+            for (var i = 0; i < classData.students.length; i++) {
+                var s = classData.students[i];
+                if (s.currentCycle >= 4) completed++;
+                avgCycle += (s.currentCycle || 0);
+                avgRoster += (s.rosterQuality || 0);
+                avgPressure += (s.ownerPressure || 0);
+                totalChamps += (s.championships || 0);
+            }
+            
+            if (totalStudents > 0) {
+                avgCycle = avgCycle / totalStudents;
+                avgRoster = avgRoster / totalStudents;
+                avgPressure = avgPressure / totalStudents;
+            }
+            
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #f5a623;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Total Students</div><div style="font-size:2.5rem;font-weight:bold;color:#f5a623;">' + totalStudents + '</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #22c55e;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Completed</div><div style="font-size:2.5rem;font-weight:bold;color:#22c55e;">' + completed + '</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #3b82f6;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Cycle</div><div style="font-size:2.5rem;font-weight:bold;color:#3b82f6;">' + avgCycle.toFixed(1) + '</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #f59e0b;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Roster</div><div style="font-size:2.5rem;font-weight:bold;color:#f59e0b;">' + Math.round(avgRoster) + '%</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #ef4444;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Avg Pressure</div><div style="font-size:2.5rem;font-weight:bold;color:#ef4444;">' + Math.round(avgPressure) + '%</div></div>';
+            html += '<div style="padding:1.5rem;background:#132642;border-radius:8px;border-left:4px solid #fbbf24;"><div style="font-size:0.85rem;color:#b8c5d6;margin-bottom:0.5rem;">Championships</div><div style="font-size:2.5rem;font-weight:bold;color:#fbbf24;">🏆 ' + totalChamps + '</div></div>';
             html += '</div>';
             
+            // Student table
             html += '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:1.5rem;">';
-            html += '<h2 style="color:#f5a623;">Students (' + data.students.length + ')</h2>';
-            html += '<table style="width:100%;color:#fff;border-collapse:collapse;margin-top:1rem;">';
-            html += '<thead><tr style="background:rgba(255,255,255,0.1);"><th style="padding:1rem;text-align:left;">Name</th><th style="padding:1rem;">Cycle</th><th style="padding:1rem;">Roster</th><th style="padding:1rem;">Pressure</th><th style="padding:1rem;">Champs</th></tr></thead>';
-            html += '<tbody>';
+            html += '<h2 style="color:#f5a623;margin-bottom:1rem;">Students (' + totalStudents + ')</h2>';
+            html += '<div style="overflow-x:auto;">';
+            html += '<table style="width:100%;color:#fff;border-collapse:collapse;">';
+            html += '<thead><tr style="background:rgba(255,255,255,0.1);text-align:left;">';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Name</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Cycle</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Roster Quality</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Owner Pressure</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Concepts</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Champs</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Last Active</th>';
+            html += '</tr></thead><tbody>';
             
-            if (data.students.length === 0) {
-                html += '<tr><td colspan="5" style="padding:2rem;text-align:center;color:#b8c5d6;">No students yet</td></tr>';
+            if (totalStudents === 0) {
+                html += '<tr><td colspan="7" style="padding:2rem;text-align:center;color:#b8c5d6;"><div style="font-size:3rem;margin-bottom:1rem;">👥</div><p>No students yet!</p><p style="color:#7a8a9e;margin-top:0.5rem;">Students will appear here when they sign in with your class code.</p></td></tr>';
             } else {
-                for (var i = 0; i < data.students.length; i++) {
-                    var s = data.students[i];
+                for (var i = 0; i < classData.students.length; i++) {
+                    var s = classData.students[i];
+                    var lastActive = new Date(s.lastActive || s.startTime);
+                    var now = new Date();
+                    var diffSec = Math.floor((now - lastActive) / 1000);
+                    var timeAgo = diffSec < 60 ? 'Just now' :
+                                  diffSec < 3600 ? Math.floor(diffSec / 60) + 'm ago' :
+                                  diffSec < 86400 ? Math.floor(diffSec / 3600) + 'h ago' :
+                                  Math.floor(diffSec / 86400) + 'd ago';
+                    
+                    var rosterColor = s.rosterQuality >= 70 ? '#22c55e' : s.rosterQuality >= 50 ? '#f59e0b' : '#ef4444';
+                    var pressureColor = s.ownerPressure >= 70 ? '#ef4444' : s.ownerPressure >= 50 ? '#f59e0b' : '#22c55e';
+                    
                     html += '<tr style="border-bottom:1px solid #2d4a6f;">';
-                    html += '<td style="padding:1rem;">' + s.name + '</td>';
-                    html += '<td style="padding:1rem;text-align:center;">' + (s.currentCycle || 0) + '/4</td>';
-                    html += '<td style="padding:1rem;text-align:center;">' + Math.round(s.rosterQuality || 0) + '%</td>';
-                    html += '<td style="padding:1rem;text-align:center;">' + Math.round(s.ownerPressure || 0) + '%</td>';
-                    html += '<td style="padding:1rem;text-align:center;">' + (s.championships || 0) + '</td>';
+                    html += '<td style="padding:1rem;font-weight:600;">' + s.name + '</td>';
+                    html += '<td style="padding:1rem;text-align:center;"><span style="font-weight:600;">' + (s.currentCycle || 0) + '</span> / 4</td>';
+                    html += '<td style="padding:1rem;text-align:center;"><span style="color:' + rosterColor + ';font-weight:600;">' + Math.round(s.rosterQuality || 0) + '%</span></td>';
+                    html += '<td style="padding:1rem;text-align:center;"><span style="color:' + pressureColor + ';font-weight:600;">' + Math.round(s.ownerPressure || 0) + '%</span></td>';
+                    html += '<td style="padding:1rem;text-align:center;">' + (s.conceptsMastered || 0) + '</td>';
+                    html += '<td style="padding:1rem;text-align:center;font-size:1.2rem;">' + (s.championships > 0 ? '🏆 ' + s.championships : '-') + '</td>';
+                    html += '<td style="padding:1rem;text-align:center;color:#7a8a9e;font-size:0.9rem;">' + timeAgo + '</td>';
                     html += '</tr>';
                 }
             }
             
-            html += '</tbody></table></div></div></div>';
+            html += '</tbody></table></div></div>';
+            html += '<div style="text-align:center;margin-top:2rem;padding:1rem;background:rgba(245,166,35,0.1);border-radius:8px;">';
+            html += '<p style="color:#b8c5d6;font-size:0.9rem;">💡 Dashboard auto-refreshes every 10 seconds. Click "Refresh Now" for immediate update.</p>';
+            html += '</div></div></div>';
+            
             document.body.innerHTML = html;
+            
+            // Auto-refresh every 10 seconds
+            if (this.refreshTimer) clearInterval(this.refreshTimer);
+            this.refreshTimer = setInterval(function() {
+                window.TeacherDashboard.refresh();
+            }, 10000);
+            
+            console.log('Dashboard rendered');
         },
         
         refresh: function() {
+            console.log('Refreshing dashboard...');
             this.show();
+        },
+        
+        exportCSV: function() {
+            var user = window.AuthSystem.currentUser;
+            var classData = JSON.parse(localStorage.getItem('class_' + user.classCode) || '{"students":[]}');
+            
+            var csv = 'Name,Cycle,Roster Quality,Owner Pressure,Concepts Mastered,Championships,Playoff Appearances,Last Active\n';
+            
+            for (var i = 0; i < classData.students.length; i++) {
+                var s = classData.students[i];
+                csv += '"' + s.name + '",';
+                csv += (s.currentCycle || 0) + ',';
+                csv += Math.round(s.rosterQuality || 0) + ',';
+                csv += Math.round(s.ownerPressure || 0) + ',';
+                csv += (s.conceptsMastered || 0) + ',';
+                csv += (s.championships || 0) + ',';
+                csv += (s.playoffAppearances || 0) + ',';
+                csv += '"' + new Date(s.lastActive || s.startTime).toLocaleString() + '"\n';
+            }
+            
+            var blob = new Blob([csv], {type: 'text/csv'});
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'TFR_Class_' + user.classCode + '_' + new Date().toISOString().split('T')[0] + '.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            console.log('CSV exported');
         }
     };
     
 })();
 
-console.log('Enhancements loaded successfully');
+console.log('✅ Complete storage system loaded');
+
 
 
         // ================================
@@ -15307,7 +15528,9 @@ function downloadQuizAnswers() {
             
             GameState.advanceCycle();
             
-            if (window.AuthSystem && window.AuthSystem.currentUser) {
+            console.log('Cycle advanced to:', GameState.cycleIndex);
+            if (window.AuthSystem && window.AuthSystem.currentUser && !window.AuthSystem.isTeacher) {
+                console.log('Updating student progress...');
                 window.AuthSystem.updateProgress(GameState);
             }
             
@@ -15946,14 +16169,19 @@ function downloadQuizAnswers() {
         
         // EVENT LISTENERS
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, checking auth...');
             if (!window.AuthSystem.init()) {
+                console.log('No user found, showing login');
                 window.AuthSystem.showLoginScreen();
                 return;
             }
+            console.log('User found:', window.AuthSystem.currentUser);
             if (window.AuthSystem.isTeacher) {
+                console.log('User is teacher, showing dashboard');
                 window.TeacherDashboard.show();
                 return;
             }
+            console.log('User is student, starting game');
             document.getElementById('btn-start').addEventListener('click', () => showScreen('franchise'));
             document.getElementById('btn-how-it-works').addEventListener('click', () => showModal('how'));
             
