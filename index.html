@@ -2878,9 +2878,7 @@
                         quizAnswers: [],
                         gameCompleted: false,
                         finalRoster: 0,
-                        finalPressure: 0,
-                        tier: 'Not Set',
-                        finalTier: 'Not Set' 
+                        finalPressure: 0
                     };
                     
                     classData.students.push(newStudent);
@@ -2918,19 +2916,11 @@
                         classData.students[i].playoffAppearances = gameState.playoffAppearances || 0;
                         classData.students[i].lastActive = Date.now();
                         
-                        // Track tier
-                        if (gameState.currentTier) {
-                            classData.students[i].tier = gameState.currentTier;
-                        }
-                        
                         // Track if game completed
                         if (gameState.cycleIndex > 4) {
                             classData.students[i].gameCompleted = true;
                             classData.students[i].finalRoster = Math.round(gameState.rosterQuality);
                             classData.students[i].finalPressure = Math.round(gameState.ownerPressure);
-                            if (gameState.currentTier) {
-                                classData.students[i].finalTier = gameState.currentTier;
-                            }
                         }
                         
                         console.log('Progress updated:', classData.students[i]);
@@ -3053,14 +3043,13 @@
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Roster</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Pressure</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Concepts</th>';
-            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Tier</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Champs</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Status</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Last Active</th>';
             html += '</tr></thead><tbody>';
             
             if (total === 0) {
-                html += '<tr><td colspan="10" style="padding:3rem;text-align:center;"><div style="font-size:3rem;margin-bottom:1rem;">👥</div><p style="color:#b8c5d6;">No students yet</p><p style="color:#7a8a9e;margin-top:0.5rem;">Students will appear when they join with code: <strong style="color:#f5a623;">' + user.classCode + '</strong></p></td></tr>';
+                html += '<tr><td colspan="9" style="padding:3rem;text-align:center;"><div style="font-size:3rem;margin-bottom:1rem;">👥</div><p style="color:#b8c5d6;">No students yet</p><p style="color:#7a8a9e;margin-top:0.5rem;">Students will appear when they join with code: <strong style="color:#f5a623;">' + user.classCode + '</strong></p></td></tr>';
             } else {
                 classData.students.sort(function(a, b) {
                     return (b.lastActive || 0) - (a.lastActive || 0);
@@ -3104,12 +3093,6 @@
             html += '<td style="padding:1rem;text-align:center;"><span style="color:' + rosterColor + ';font-weight:600;">' + Math.round(s.rosterQuality || 0) + '%</span></td>';
             html += '<td style="padding:1rem;text-align:center;"><span style="color:' + pressureColor + ';font-weight:600;">' + Math.round(s.ownerPressure || 0) + '%</span></td>';
             html += '<td style="padding:1rem;text-align:center;">' + (s.conceptsMastered || 0) + '</td>';
-            var tierDisplay = s.tier || 'Not Set';
-            var tierColor = tierDisplay === 'Elite' ? '#fbbf24' : 
-                           tierDisplay === 'Contender' ? '#22c55e' :
-                           tierDisplay === 'Middling' ? '#3b82f6' :
-                           tierDisplay === 'Rebuilding' ? '#f59e0b' : '#7a8a9e';
-            html += '<td style="padding:1rem;text-align:center;"><span style="color:' + tierColor + ';font-weight:600;">' + tierDisplay + '</span></td>';
             html += '<td style="padding:1rem;text-align:center;">' + (s.championships > 0 ? '🏆 ' + s.championships : '-') + '</td>';
             html += '<td style="padding:1rem;text-align:center;">' + status + '</td>';
             html += '<td style="padding:1rem;text-align:center;color:#7a8a9e;font-size:0.9rem;">' + timeAgo + '</td>';
@@ -3155,7 +3138,7 @@
             var user = window.AuthSystem.currentUser;
             var classData = JSON.parse(localStorage.getItem('class_' + user.classCode) || '{"students":[]}');
             
-            var csv = 'Name,Cycle,Quiz Score,Quiz %,Roster Quality,Owner Pressure,Concepts,Tier,Championships,Completed,Last Active\n';
+            var csv = 'Name,Cycle,Quiz Score,Quiz %,Roster Quality,Owner Pressure,Concepts,Championships,Completed,Last Active\n';
             
             for (var i = 0; i < classData.students.length; i++) {
                 var s = classData.students[i];
@@ -3166,7 +3149,6 @@
                 csv += Math.round(s.rosterQuality || 0) + ',';
                 csv += Math.round(s.ownerPressure || 0) + ',';
                 csv += (s.conceptsMastered || 0) + ',';
-                csv += (s.tier || 'Not Set') + ',';
                 csv += (s.championships || 0) + ',';
                 csv += (s.gameCompleted ? 'Yes' : 'No') + ',';
                 csv += '"' + new Date(s.lastActive || s.startTime).toLocaleString() + '"\n';
