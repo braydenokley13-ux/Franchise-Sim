@@ -2667,6 +2667,7 @@
     </div>
 
     <script>
+
 // ULTIMATE STORAGE SYSTEM - Persistent Classes + Quiz Grading
 (function() {
     'use strict';
@@ -3043,6 +3044,7 @@
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Roster</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Pressure</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Concepts</th>';
+            html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Tier</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Champs</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Status</th>';
             html += '<th style="padding:1rem;border-bottom:2px solid #2d4a6f;">Last Active</th>';
@@ -3074,7 +3076,8 @@
         },
         
         renderStudentRow: function(s) {
-            var timeAgo = this.getTimeAgo(new Date(s.lastActive || s.startTime));
+            var timeAgo = this.getTimeAgo(s.lastUpdated ? new Date(s.lastUpdated) : new Date());
+            window.studentDataCache[s.name] = s;
             var rosterColor = s.rosterQuality >= 70 ? '#22c55e' : s.rosterQuality >= 50 ? '#f59e0b' : '#ef4444';
             var pressureColor = s.ownerPressure >= 70 ? '#ef4444' : s.ownerPressure >= 50 ? '#f59e0b' : '#22c55e';
             
@@ -3093,9 +3096,20 @@
             html += '<td style="padding:1rem;text-align:center;"><span style="color:' + rosterColor + ';font-weight:600;">' + Math.round(s.rosterQuality || 0) + '%</span></td>';
             html += '<td style="padding:1rem;text-align:center;"><span style="color:' + pressureColor + ';font-weight:600;">' + Math.round(s.ownerPressure || 0) + '%</span></td>';
             html += '<td style="padding:1rem;text-align:center;">' + (s.conceptsMastered || 0) + '</td>';
+            var tierDisplay = s.tier || 'Not Set';
+            var tierColor = tierDisplay === 'Elite' ? '#fbbf24' : tierDisplay === 'Contender' ? '#22c55e' : tierDisplay === 'Middling' ? '#3b82f6' : tierDisplay === 'Rebuilding' ? '#f59e0b' : '#7a8a9e';
+            html += '<td style="padding:1rem;text-align:center;"><span style="color:' + tierColor + ';font-weight:600;">' + tierDisplay + '</span></td>';
             html += '<td style="padding:1rem;text-align:center;">' + (s.championships > 0 ? '🏆 ' + s.championships : '-') + '</td>';
             html += '<td style="padding:1rem;text-align:center;">' + status + '</td>';
             html += '<td style="padding:1rem;text-align:center;color:#7a8a9e;font-size:0.9rem;">' + timeAgo + '</td>';
+            html += '<td style="padding:1rem;text-align:center;">';
+            if (s.quizTaken) {
+                html += '<button onclick="QuizViewer.show(\'' + s.name + '\')" style="padding:0.5rem 1rem;background:#3b82f6;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:0.85rem;margin:0.25rem;">📝</button>';
+            }
+            if (s.pressConferenceAnswers && s.pressConferenceAnswers.length > 0) {
+                html += '<button onclick="PressViewer.show(\'' + s.name + '\')" style="padding:0.5rem 1rem;background:#8b5cf6;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:0.85rem;margin:0.25rem;">🎤</button>';
+            }
+            html += '</td>';
             html += '</tr>';
             return html;
         },
@@ -3138,7 +3152,7 @@
             var user = window.AuthSystem.currentUser;
             var classData = JSON.parse(localStorage.getItem('class_' + user.classCode) || '{"students":[]}');
             
-            var csv = 'Name,Cycle,Quiz Score,Quiz %,Roster Quality,Owner Pressure,Concepts,Championships,Completed,Last Active\n';
+            var csv = 'Name,Cycle,Quiz Score,Quiz %,Roster Quality,Owner Pressure,Concepts,Tier,Championships,Completed,Last Active\n';
             
             for (var i = 0; i < classData.students.length; i++) {
                 var s = classData.students[i];
@@ -3149,6 +3163,7 @@
                 csv += Math.round(s.rosterQuality || 0) + ',';
                 csv += Math.round(s.ownerPressure || 0) + ',';
                 csv += (s.conceptsMastered || 0) + ',';
+                csv += (s.tier || 'Not Set') + ',';
                 csv += (s.championships || 0) + ',';
                 csv += (s.gameCompleted ? 'Yes' : 'No') + ',';
                 csv += '"' + new Date(s.lastActive || s.startTime).toLocaleString() + '"\n';
@@ -3172,62 +3187,353 @@ console.log('✅ Ultimate storage system loaded - Classes persist forever!');
 
 
 
-// Add this to integrate with the existing quiz system
+// CLEAN INTEGRATION - No Quote Issues
 
-// Override or hook into the existing quiz submission
-window.originalSubmitQuiz = window.submitQuiz;
-window.submitQuiz = function() {
-    console.log('Quiz being submitted...');
-    
-    // Call original function if it exists
-    if (window.originalSubmitQuiz) {
-        window.originalSubmitQuiz();
-    }
-    
-    // Get quiz results from GameState
-    if (window.GameState && window.GameState.quizResults) {
-        var results = window.GameState.quizResults;
-        var score = results.correctAnswers || 0;
-        var total = results.totalQuestions || 10;
-        var answers = results.answers || [];
+// Store student data in a temporary global for viewing
+window.studentDataCache = {};
+
+window.QuizViewer = {
+    show: function(studentName) {
+        var studentData = window.studentDataCache[studentName];
+        if (!studentData) {
+            alert('Student data not found');
+            return;
+        }
         
-        console.log('Quiz results:', score + '/' + total);
+        var modal = document.getElementById('screen-replay');
+        if (!modal) {
+            alert('Modal not found');
+            return;
+        }
+        var content = document.getElementById('replay-content');
         
-        // Submit to storage system
-        if (window.AuthSystem) {
-            window.AuthSystem.submitQuiz(score, total, answers);
+        var html = '<div style="padding:2rem;max-width:900px;margin:auto;max-height:90vh;overflow-y:auto;">';
+        html += '<h2 style="color:#f5a623;margin-bottom:1rem;">Quiz Answers: ' + studentName + '</h2>';
+        
+        if (!studentData.quizTaken) {
+            html += '<div style="padding:2rem;text-align:center;color:#b8c5d6;">';
+            html += '<div style="font-size:3rem;margin-bottom:1rem;">📋</div>';
+            html += '<p>Student has not taken the quiz yet.</p>';
+            html += '</div>';
+        } else {
+            html += '<div style="padding:1.5rem;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:2rem;">';
+            html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center;">';
+            html += '<div><div style="color:#b8c5d6;font-size:0.9rem;">Score</div><div style="font-size:2rem;font-weight:bold;color:#f5a623;">' + studentData.quizScore + '/' + studentData.quizTotalQuestions + '</div></div>';
+            
+            var pctColor = studentData.quizPercentage >= 70 ? '#22c55e' : studentData.quizPercentage >= 60 ? '#f59e0b' : '#ef4444';
+            html += '<div><div style="color:#b8c5d6;font-size:0.9rem;">Percentage</div><div style="font-size:2rem;font-weight:bold;color:' + pctColor + ';">' + studentData.quizPercentage + '%</div></div>';
+            
+            var submitTime = studentData.quizSubmittedAt ? new Date(studentData.quizSubmittedAt).toLocaleString() : 'N/A';
+            html += '<div><div style="color:#b8c5d6;font-size:0.9rem;">Submitted</div><div style="font-size:0.9rem;color:#b8c5d6;margin-top:0.5rem;">' + submitTime + '</div></div>';
+            html += '</div></div>';
+            
+            if (studentData.quizAnswers && studentData.quizAnswers.length > 0) {
+                html += '<h3 style="margin-bottom:1rem;">Detailed Answers:</h3>';
+                
+                for (var i = 0; i < studentData.quizAnswers.length; i++) {
+                    var ans = studentData.quizAnswers[i];
+                    var isCorrect = ans.correct;
+                    var borderColor = isCorrect ? '#22c55e' : '#ef4444';
+                    
+                    html += '<div style="padding:1.5rem;background:rgba(255,255,255,0.03);border-left:4px solid ' + borderColor + ';border-radius:8px;margin-bottom:1rem;">';
+                    html += '<div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">';
+                    html += '<div style="font-weight:600;color:#f5a623;">Question ' + (i + 1) + '</div>';
+                    
+                    var badge = isCorrect ? 
+                        '<div style="padding:0.25rem 0.75rem;background:rgba(34,197,94,0.2);border-radius:4px;color:#22c55e;font-size:0.85rem;">✓ Correct</div>' :
+                        '<div style="padding:0.25rem 0.75rem;background:rgba(239,68,68,0.2);border-radius:4px;color:#ef4444;font-size:0.85rem;">✗ Incorrect</div>';
+                    html += badge;
+                    html += '</div>';
+                    
+                    html += '<div style="color:#b8c5d6;margin-bottom:0.75rem;">' + (ans.question || 'Question text not available') + '</div>';
+                    html += '<div style="margin-bottom:0.5rem;"><strong>Student Answer:</strong> <span style="color:' + (isCorrect ? '#22c55e' : '#ef4444') + ';">' + (ans.studentAnswer || 'Not answered') + '</span></div>';
+                    
+                    if (!isCorrect && ans.correctAnswer) {
+                        html += '<div><strong style="color:#22c55e;">Correct Answer:</strong> ' + ans.correctAnswer + '</div>';
+                    }
+                    
+                    html += '</div>';
+                }
+            } else {
+                html += '<div style="padding:2rem;background:rgba(255,255,255,0.03);border-radius:8px;text-align:center;color:#7a8a9e;">';
+                html += '<p>Quiz answers not recorded in detail.</p>';
+                html += '<p style="margin-top:0.5rem;">Score: ' + studentData.quizScore + '/' + studentData.quizTotalQuestions + '</p>';
+                html += '</div>';
+            }
+        }
+        
+        html += '<button onclick="QuizViewer.close()" style="width:100%;padding:1rem;background:#f5a623;color:#000;font-weight:bold;border-radius:8px;border:none;cursor:pointer;margin-top:2rem;">Close</button>';
+        html += '</div>';
+        
+        content.innerHTML = html;
+        modal.style.display = 'flex';
+    },
+    
+    close: function() {
+        document.getElementById('screen-replay').style.display = 'none';
+        if (window.TeacherDashboard) {
+            window.TeacherDashboard.show();
         }
     }
 };
 
-// Hook into quiz completion
-if (window.GameState) {
-    var originalCompleteQuiz = window.GameState.completeQuiz;
-    if (originalCompleteQuiz) {
-        window.GameState.completeQuiz = function(score, total, answers) {
-            console.log('Quiz completed:', score, total);
-            
-            // Store results
-            window.GameState.quizResults = {
-                correctAnswers: score,
-                totalQuestions: total,
-                answers: answers
-            };
-            
-            // Submit to storage
-            if (window.AuthSystem) {
-                window.AuthSystem.submitQuiz(score, total, answers);
+window.PressViewer = {
+    show: function(studentName) {
+        var studentData = window.studentDataCache[studentName];
+        if (!studentData) {
+            alert('Student data not found');
+            return;
+        }
+        
+        var modal = document.getElementById('screen-replay');
+        if (!modal) {
+            alert('Modal not found');
+            return;
+        }
+        var content = document.getElementById('replay-content');
+        
+        var html = '<div style="padding:2rem;max-width:900px;margin:auto;max-height:90vh;overflow-y:auto;">';
+        html += '<h2 style="color:#f5a623;margin-bottom:1rem;">Press Conference Answers: ' + studentName + '</h2>';
+        
+        if (!studentData.pressConferenceAnswers || studentData.pressConferenceAnswers.length === 0) {
+            html += '<div style="padding:2rem;text-align:center;color:#b8c5d6;">';
+            html += '<div style="font-size:3rem;margin-bottom:1rem;">🎤</div>';
+            html += '<p>No press conference answers recorded yet.</p>';
+            html += '</div>';
+        } else {
+            for (var c = 0; c < studentData.pressConferenceAnswers.length; c++) {
+                var conf = studentData.pressConferenceAnswers[c];
+                
+                html += '<div style="padding:1.5rem;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:1.5rem;">';
+                html += '<h3 style="color:#f5a623;margin-bottom:1rem;">Cycle ' + conf.cycle + ' Press Conference</h3>';
+                
+                var totalMedia = 0;
+                var totalOwner = 0;
+                
+                for (var i = 0; i < conf.answers.length; i++) {
+                    var ans = conf.answers[i];
+                    totalMedia += ans.mediaEffect;
+                    totalOwner += ans.ownerEffect;
+                    
+                    var ansColor = (ans.mediaEffect > 5 || ans.ownerEffect > 5) ? '#22c55e' :
+                                  (ans.mediaEffect < -10 || ans.ownerEffect < -10) ? '#ef4444' : '#7a8a9e';
+                    
+                    html += '<div style="padding:1rem;background:rgba(255,255,255,0.03);border-left:4px solid ' + ansColor + ';border-radius:8px;margin-bottom:0.75rem;">';
+                    html += '<div style="font-size:0.85rem;color:#7a8a9e;margin-bottom:0.5rem;">Q: ' + ans.question + '</div>';
+                    html += '<div style="font-weight:600;color:#fff;margin-bottom:0.5rem;">"' + ans.answer + '"</div>';
+                    html += '<div style="font-size:0.85rem;color:#b8c5d6;">Media: ' + (ans.mediaEffect > 0 ? '+' : '') + ans.mediaEffect + ' | Owner: ' + (ans.ownerEffect > 0 ? '+' : '') + ans.ownerEffect + '</div>';
+                    html += '</div>';
+                }
+                
+                html += '<div style="margin-top:1rem;padding:1rem;background:rgba(245,166,35,0.1);border-radius:8px;">';
+                html += '<strong>Total Impact:</strong> Media ' + (totalMedia > 0 ? '+' : '') + totalMedia + ' | Owner ' + (totalOwner > 0 ? '+' : '') + totalOwner;
+                html += '</div></div>';
             }
-            
-            // Call original
-            if (originalCompleteQuiz) {
-                originalCompleteQuiz.call(this, score, total, answers);
-            }
-        };
+        }
+        
+        html += '<button onclick="PressViewer.close()" style="width:100%;padding:1rem;background:#f5a623;color:#000;font-weight:bold;border-radius:8px;border:none;cursor:pointer;margin-top:2rem;">Close</button>';
+        html += '</div>';
+        
+        content.innerHTML = html;
+        modal.style.display = 'flex';
+    },
+    
+    close: function() {
+        document.getElementById('screen-replay').style.display = 'none';
+        if (window.TeacherDashboard) {
+            window.TeacherDashboard.show();
+        }
     }
-}
+};
 
-console.log('✅ Quiz integration loaded');
+window.InteractivePressConference = {
+    questions: [],
+    answers: [],
+    currentIndex: 0,
+    
+    show: function(outcome) {
+        this.questions = this.generateQuestions(outcome);
+        this.answers = [];
+        this.currentIndex = 0;
+        this.showQuestion(0);
+    },
+    
+    generateQuestions: function(outcome) {
+        var isGood = outcome && (outcome.outcome === 'Championship' || outcome.outcome === 'Playoffs');
+        
+        return [
+            {
+                question: isGood ? "How does winning feel?" : "What went wrong this season?",
+                options: [
+                    { text: "We executed our strategy perfectly", media: 10, owner: 5 },
+                    { text: "There's always room for improvement", media: 5, owner: 3 },
+                    { text: "We got lucky in key moments", media: -5, owner: -5 },
+                    { text: "No comment", media: -15, owner: -10 }
+                ]
+            },
+            {
+                question: "What's your message to the fans?",
+                options: [
+                    { text: "Thank you for your support", media: 8, owner: 5 },
+                    { text: "Trust the process", media: 2, owner: 3 },
+                    { text: "We need patience", media: -5, owner: 5 },
+                    { text: "If you don't believe, that's your problem", media: -20, owner: -15 }
+                ]
+            },
+            {
+                question: "How is your relationship with ownership?",
+                options: [
+                    { text: "We're completely aligned", media: 5, owner: 15 },
+                    { text: "I don't discuss private conversations", media: -5, owner: 5 },
+                    { text: "The owner understands this is a process", media: 0, owner: 10 },
+                    { text: "I work for the fans, not ownership", media: 10, owner: -25 }
+                ]
+            }
+        ];
+    },
+    
+    showQuestion: function(index) {
+        if (index >= this.questions.length) {
+            this.showResults();
+            return;
+        }
+        
+        var q = this.questions[index];
+        var modal = document.getElementById('screen-replay');
+        var content = document.getElementById('replay-content');
+        
+        if (!modal || !content) {
+            console.error('Modal elements not found');
+            return;
+        }
+        
+        var html = '<div style="padding:2rem;max-width:700px;margin:auto;">';
+        html += '<div style="text-align:center;margin-bottom:2rem;">';
+        html += '<div style="font-size:4rem;margin-bottom:1rem;">🎤</div>';
+        html += '<h2 style="color:#f5a623;">Press Conference</h2>';
+        html += '<p style="color:#b8c5d6;">Question ' + (index + 1) + ' of ' + this.questions.length + '</p>';
+        html += '</div>';
+        
+        html += '<div style="padding:1.5rem;background:rgba(255,255,255,0.05);border-left:4px solid #f5a623;border-radius:8px;margin-bottom:2rem;">';
+        html += '<strong style="color:#f5a623;">Reporter:</strong>';
+        html += '<p style="margin-top:0.5rem;font-size:1.1rem;">"' + q.question + '"</p>';
+        html += '</div>';
+        
+        html += '<h3 style="margin-bottom:1rem;color:#fff;">Your Response:</h3>';
+        
+        for (var i = 0; i < q.options.length; i++) {
+            html += '<button onclick="InteractivePressConference.answer(' + index + ',' + i + ')" ';
+            html += 'style="width:100%;padding:1.25rem;margin-bottom:0.75rem;text-align:left;';
+            html += 'background:rgba(255,255,255,0.05);border:2px solid #2d4a6f;border-radius:8px;';
+            html += 'cursor:pointer;color:#fff;font-size:1rem;">';
+            html += '"' + q.options[i].text + '"';
+            html += '</button>';
+        }
+        
+        html += '<div style="margin-top:2rem;padding:1rem;background:rgba(245,166,35,0.1);border-radius:8px;text-align:center;">';
+        html += '<p style="color:#f5a623;font-size:0.9rem;">⚠️ Your answers will affect media and owner perception</p>';
+        html += '</div></div>';
+        
+        content.innerHTML = html;
+        modal.style.display = 'flex';
+    },
+    
+    answer: function(qIndex, aIndex) {
+        var q = this.questions[qIndex];
+        var a = q.options[aIndex];
+        
+        this.answers.push({
+            question: q.question,
+            answer: a.text,
+            mediaEffect: a.media,
+            ownerEffect: a.owner
+        });
+        
+        if (window.GameState) {
+            window.GameState.mediaHeat = Math.max(0, Math.min(100, (window.GameState.mediaHeat || 50) + a.media));
+            window.GameState.ownerPressure = Math.max(0, Math.min(100, (window.GameState.ownerPressure || 50) + a.owner));
+        }
+        
+        this.currentIndex++;
+        var self = this;
+        setTimeout(function() {
+            self.showQuestion(self.currentIndex);
+        }, 300);
+    },
+    
+    showResults: function() {
+        var totalMedia = 0;
+        var totalOwner = 0;
+        for (var i = 0; i < this.answers.length; i++) {
+            totalMedia += this.answers[i].mediaEffect;
+            totalOwner += this.answers[i].ownerEffect;
+        }
+        
+        var modal = document.getElementById('screen-replay');
+        var content = document.getElementById('replay-content');
+        
+        var html = '<div style="padding:2rem;max-width:800px;margin:auto;">';
+        html += '<h2 style="text-align:center;color:#f5a623;margin-bottom:2rem;">Press Conference Results</h2>';
+        
+        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">';
+        
+        var mediaColor = totalMedia > 0 ? '#22c55e' : totalMedia < 0 ? '#ef4444' : '#7a8a9e';
+        html += '<div style="padding:2rem;background:rgba(255,255,255,0.05);border:2px solid ' + mediaColor + ';border-radius:12px;text-align:center;">';
+        html += '<div style="font-size:3rem;">' + (totalMedia > 0 ? '📈' : totalMedia < 0 ? '📉' : '➡️') + '</div>';
+        html += '<div style="margin-top:0.5rem;color:#b8c5d6;">Media Impact</div>';
+        html += '<div style="font-size:2.5rem;font-weight:bold;color:' + mediaColor + ';">' + (totalMedia > 0 ? '+' : '') + totalMedia + '</div>';
+        html += '</div>';
+        
+        var ownerColor = totalOwner > 0 ? '#22c55e' : totalOwner < 0 ? '#ef4444' : '#7a8a9e';
+        html += '<div style="padding:2rem;background:rgba(255,255,255,0.05);border:2px solid ' + ownerColor + ';border-radius:12px;text-align:center;">';
+        html += '<div style="font-size:3rem;">' + (totalOwner > 0 ? '👍' : totalOwner < 0 ? '👎' : '🤝') + '</div>';
+        html += '<div style="margin-top:0.5rem;color:#b8c5d6;">Owner Impact</div>';
+        html += '<div style="font-size:2.5rem;font-weight:bold;color:' + ownerColor + ';">' + (totalOwner > 0 ? '+' : '') + totalOwner + '</div>';
+        html += '</div></div>';
+        
+        html += '<button onclick="InteractivePressConference.close()" style="width:100%;padding:1.25rem;background:#f5a623;color:#000;font-weight:bold;border-radius:8px;border:none;cursor:pointer;">Continue</button>';
+        html += '</div>';
+        
+        content.innerHTML = html;
+        
+        // Save answers
+        this.saveAnswers();
+    },
+    
+    saveAnswers: function() {
+        if (!window.AuthSystem || window.AuthSystem.isTeacher) return;
+        
+        try {
+            var classKey = 'class_' + window.AuthSystem.currentUser.classCode;
+            var classData = JSON.parse(localStorage.getItem(classKey) || '{"students":[]}');
+            
+            for (var i = 0; i < classData.students.length; i++) {
+                if (classData.students[i].name === window.AuthSystem.currentUser.name) {
+                    if (!classData.students[i].pressConferenceAnswers) {
+                        classData.students[i].pressConferenceAnswers = [];
+                    }
+                    classData.students[i].pressConferenceAnswers.push({
+                        cycle: window.GameState ? window.GameState.cycleIndex - 1 : 0,
+                        answers: this.answers,
+                        timestamp: Date.now()
+                    });
+                    localStorage.setItem(classKey, JSON.stringify(classData));
+                    console.log('Press answers saved');
+                    break;
+                }
+            }
+        } catch(e) {
+            console.error('Error saving press answers:', e);
+        }
+    },
+    
+    close: function() {
+        document.getElementById('screen-replay').style.display = 'none';
+    }
+};
+
+console.log('✅ Clean viewers and press conference loaded');
+
 
 
 
@@ -15504,7 +15810,7 @@ function downloadQuizAnswers() {
             const headline = window._currentHeadline || GameState.headlines[GameState.headlines.length - 1]?.text || "Season Complete";
             
             document.getElementById('screen-outcome').style.display = 'none';
-            MediaSystem.showPressConference(lastOutcome, headline);
+            if (window.InteractivePressConference) { InteractivePressConference.show(lastOutcome); } else { MediaSystem.showPressConference(lastOutcome, headline); }
         }
         
         function closePressAndShowOwner() {
@@ -15695,11 +16001,10 @@ function downloadQuizAnswers() {
             
             GameState.advanceCycle();
             
-            console.log('=== CYCLE ADVANCED ===');
+            console.log('Cycle advanced to:', GameState.cycleIndex);
             if (window.AuthSystem && !window.AuthSystem.isTeacher) {
-                console.log('Updating student progress...');
+                console.log('Updating progress...');
                 window.AuthSystem.updateProgress(GameState);
-                console.log('Progress saved!');
             }
             
             console.log('New Cycle:', GameState.cycleIndex);
@@ -16337,19 +16642,19 @@ function downloadQuizAnswers() {
         
         // EVENT LISTENERS
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('=== GAME STARTING ===');
+            console.log('=== GAME LOADING ===');
             if (!window.AuthSystem.init()) {
-                console.log('No user - showing login');
+                console.log('No user found, showing login');
                 window.AuthSystem.showLoginScreen();
                 return;
             }
-            console.log('User logged in:', window.AuthSystem.currentUser.name, window.AuthSystem.currentUser.role);
+            console.log('User found:', window.AuthSystem.currentUser.name);
             if (window.AuthSystem.isTeacher) {
-                console.log('Opening teacher dashboard');
+                console.log('Loading teacher dashboard');
                 window.TeacherDashboard.show();
                 return;
             }
-            console.log('Starting student game');
+            console.log('Loading student game');
             document.getElementById('btn-start').addEventListener('click', () => showScreen('franchise'));
             document.getElementById('btn-how-it-works').addEventListener('click', () => showModal('how'));
             
